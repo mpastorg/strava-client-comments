@@ -8,7 +8,8 @@ WORKDIR target
 RUN ls
 
 #production stage
-FROM openjdk:8-jdk-alpine as production-stage
+#FROM openjdk:8-jdk-alpine as production-stage
+FROM adoptopenjdk:11-jre-hotspot as production-stage
 RUN ls
 COPY --from=build-stage /strava-client-comments/target/client-comments-0.0.1-SNAPSHOT.jar /app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
