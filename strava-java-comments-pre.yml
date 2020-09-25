@@ -49,8 +49,7 @@ spec:
           image: mpastorg/mpg-divvy-docker:0.7.43
           imagePullPolicy: Always
           ports:
-            - containerPort: 8443
-              containerPort: 8082
+            - containerPort: 8082
           livenessProbe:
             httpGet:
               path: /actuator/health
