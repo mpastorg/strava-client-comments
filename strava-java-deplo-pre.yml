@@ -1,0 +1,85 @@
+piVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: strava-java
+  annotations:
+    kubernetes.io/ingress.class: kong
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /strava/comments
+            backend:
+              serviceName: strava-java-comments-svc-pre
+              servicePort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: strava-java-comments-svc-pre
+  name: strava-java-comments-svc-pre
+spec:
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+      name: strava-java-comments-svc-pre
+  selector:
+    app: strava-java-comments-pre
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strava-java-deplo-pre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: strava-java-pre
+  template:
+    metadata:
+      labels:
+        app: strava-java-pre
+    spec:
+      containers:
+        - name: strava-java-pre
+          image: mpastorg/mpg-divvy-docker:0.7.43
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+              containerPort: 8082
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8082
+            failureThreshold: 3
+            periodSeconds: 60
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8082
+            failureThreshold: 3
+            periodSeconds: 99
+          volumeMounts:
+            - name: cm-app-strava-vol
+              mountPath: "/config"
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 50m
+              memory: 512Mi
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: cm-app-strava-vol
+          configMap:
+            name: cm-app-strava-pre-k8m5k6cf8k
+            items:
+              - key: application.properties
+                path: application.properties
