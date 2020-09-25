@@ -1,7 +1,7 @@
-piVersion: extensions/v1beta1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: strava-java
+  name: strava-java-comments
   annotations:
     kubernetes.io/ingress.class: kong
 spec:
@@ -33,20 +33,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: strava-java-deplo-pre
+  name: strava-java-comments-pre
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: strava-java-pre
+      app: strava-java-comments-pre
   template:
     metadata:
       labels:
-        app: strava-java-pre
+        app: strava-java-comments-pre
     spec:
       containers:
-        - name: strava-java-pre
-          image: mpastorg/mpg-divvy-docker:0.7.43
+        - name: strava-java-comments-pre
+          image: mpastorg/client-comments:0.1.pre.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
