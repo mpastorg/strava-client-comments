@@ -25,7 +25,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy on kubernetes') {
+/*    stage('Deploy on kubernetes') {
       steps {
           kubernetesDeploy(
               kubeconfigId: '1c99e9a6-3159-41f1-a7d3-2e4dbbe13455',
@@ -33,7 +33,7 @@ pipeline {
               enableConfigSubstitution: true
           )
       }
-    }
+    }*/
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$RELEASE.$BUILD_NUMBER"
