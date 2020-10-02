@@ -67,7 +67,7 @@ public class ClientComments {
 
     @Override
     public String toString() {
-        return "ClientComments{" +
+        return "{" +
                 "rowtableid=" + rowtableid +
                 ", clientemail='" + clientemail + '\'' +
                 ", clientcomment='" + clientcomment + '\'' +

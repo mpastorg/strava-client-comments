@@ -18,7 +18,8 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"es.pastorg.mpgstrava","es.pastorg","es.pastorg.mpgstrava.repository"})
+@ComponentScan(basePackages = {"es.pastorg.mpgstrava","es.pastorg","es.pastorg.mpgstrava.repository"
+		,"es.pastorg.mpgstrava.repository"})
 public class ClientCommentsApplication {
 	@Value(value = "${spring.datasource.url}")
 	private String DATABASE_CONNECTION;
