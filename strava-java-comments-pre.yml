@@ -1,53 +1,38 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: strava-java-comments-pre
-  annotations:
-    kubernetes.io/ingress.class: kong
-spec:
-  rules:
-    - host: mpgubu18
-      http:
-        paths:
-          - path: /strava/comments
-            backend:
-              serviceName: strava-java-comments-svc-pre
-              servicePort: 8082
----
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: strava-java-comments-svc-pre
-  name: strava-java-comments-svc-pre
+    run: strava-java-comments-svc
+  name: strava-java-comments-svc
+  namespace: $ENV
 spec:
   ports:
     - port: 8082
       protocol: TCP
       targetPort: 8082
-      name: strava-java-comments-svc-pre
+      name: strava-java-comments-svc
   selector:
-    app: strava-java-comments-pre
+    app: strava-java-comments
   sessionAffinity: None
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: strava-java-comments-pre
+  name: strava-java-comments
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: strava-java-comments-pre
+      app: strava-java-comments
   template:
     metadata:
       labels:
-        app: strava-java-comments-pre
+        app: strava-java-comments
     spec:
       containers:
-        - name: strava-java-comments-pre
-          image: mpastorg/client-comments:0.1.pre.1
+        - name: strava-java-comments
+          image: mpastorg/client-comments:$RELEASE.$BUILD_NUMBER
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
@@ -79,7 +64,7 @@ spec:
       volumes:
         - name: cm-app-strava-vol
           configMap:
-            name: cm-app-strava-pre-k8m5k6cf8k
+            name: cm-app-strava-9946h98mtm
             items:
-              - key: application.properties
-                path: application.properties
+              - key: application.yaml
+                path: application.yaml
