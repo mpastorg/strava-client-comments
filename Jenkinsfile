@@ -2,7 +2,8 @@ pipeline {
   agent any
   environment {
     ENV = 'pre'
-    RELEASE = '0.2.pre'
+    RELEASE = '0.2'
+    CONFIGMAP = '9946h98mtm'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -30,7 +31,7 @@ pipeline {
       steps {
           kubernetesDeploy(
               kubeconfigId: '1c99e9a6-3159-41f1-a7d3-2e4dbbe13455',
-              configs: 'strava-java-comments-pre.yml',
+              configs: 'strava-java-comments.yml',
               enableConfigSubstitution: true
           )
       }
