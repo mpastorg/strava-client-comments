@@ -1,12 +1,11 @@
 package es.pastorg.mpgstrava.background;
 
-import es.pastorg.KafkaTopicConfig;
-//import es.pastorg.mpgstrava.repository.AthleteActivityEmail;
 import es.pastorg.mpgstrava.repository.ClientComments;
 import es.pastorg.mpgstrava.repository.ClientCommentsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -22,6 +21,8 @@ public class KafkaSend {
     private KafkaTemplate<String, String> kafkaTemplateClientComments;
     @Autowired
     private ClientCommentsRepository ClientCommentsRepository;
+    @Value(value = "${kafka.TOPIC_COMMENTS_EVENT}")
+    private String TOPIC_COMMENTS_EVENT;
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaSend.class);
 
@@ -29,7 +30,7 @@ public class KafkaSend {
 
         ListenableFuture<SendResult<String, String >> futuretest =
                 kafkaTemplateClientComments.
-                        send(KafkaTopicConfig.TOPIC_ATHLETE_ACTIVITY_EVENT,
+                        send(TOPIC_COMMENTS_EVENT,
                         rBodyEvent.getClass().getName(),
                         rBodyEvent.toString());
 
@@ -51,27 +52,5 @@ public class KafkaSend {
         ClientCommentsRepository.save(rBodyEvent);
 
     }
-
-//    public void sendEmailConfirmation(AthleteActivityEmail athleteActivityEmail){
-//        ListenableFuture<SendResult<String, String >> futuretest =
-//                kafkaTemplate.send(KafkaTopicConfig.TOPIC_ATHLETE_EMAIL,
-//                        athleteActivityEmail.toString());
-//
-//
-//        futuretest.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-//
-//            @Override
-//            public void onSuccess(SendResult<String, String> result) {
-//                logger.debug(athleteActivityEmail.toString() +
-//                        "] with offset=[" + result.getRecordMetadata().offset() + "]");
-//            }
-//            @Override
-//            public void onFailure(Throwable ex) {
-//                logger.debug("String Unable to send UUID message=["
-//                        + athleteActivityEmail.toString() + "] due to : " + ex.getMessage());
-//            }
-//        });
-//
-//    }
 
 }

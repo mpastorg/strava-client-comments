@@ -3,7 +3,7 @@ pipeline {
   environment {
     ENV = 'pro'
     RELEASE = '0.2'
-    CONFIGMAP = 'd94tbd69t2'
+    CONFIGMAP = '5b94df246h'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
