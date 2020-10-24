@@ -25,11 +25,11 @@ public class KafkaTopicConfig {
 
 
     @Value(value = "${kafka.bootstrapAddress}")
-    //@Value(value = "mpgubu18:31094,mpgubumac02:31094,mpgubumac01:31094")
     private String bootstrapAddress;
-
-    public static final String TOPIC_CONFIG_ID = "mpg_group_id";
-    public static final String TOPIC_ATHLETE_ACTIVITY_EVENT = "topic-notifications";
+    @Value(value = "${kafka.TOPIC_CONFIG_ID}")
+    private String TOPIC_CONFIG_ID;
+    @Value(value = "${kafka.TOPIC_COMMENTS_EVENT}")
+    private String TOPIC_COMMENTS_EVENT;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -56,7 +56,7 @@ public class KafkaTopicConfig {
 
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
-        TopicBuilder.name(TOPIC_ATHLETE_ACTIVITY_EVENT)
+        TopicBuilder.name(TOPIC_COMMENTS_EVENT)
                 .partitions(2)
                 .replicas(2)
                 .build();

@@ -21,6 +21,10 @@ public class KafkaSend {
     private KafkaTemplate<String, String> kafkaTemplateClientComments;
     @Autowired
     private ClientCommentsRepository ClientCommentsRepository;
+    @Value(value = "${kafka.bootstrapAddress}")
+    private String bootstrapAddress;
+    @Value(value = "${kafka.TOPIC_CONFIG_ID}")
+    private String TOPIC_CONFIG_ID;
     @Value(value = "${kafka.TOPIC_COMMENTS_EVENT}")
     private String TOPIC_COMMENTS_EVENT;
 
