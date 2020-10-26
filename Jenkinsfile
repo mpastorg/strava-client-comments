@@ -28,7 +28,6 @@ pipeline {
       }
     }
     stage('prepare for kubernetes') {
-        def filename = 'strava-java-comments.yml'
         sh "sed 's/MPGENV/pre/' strava-java-comments.yml > deplo_1.yml"
         sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_2.yml"
     }
