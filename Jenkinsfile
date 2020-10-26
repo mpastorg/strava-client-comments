@@ -28,13 +28,11 @@ pipeline {
       }
     }
     stage('prepare for kubernetes') {
-      steps {
         def filename = 'strava-java-comments.yml'
         sh "sed 's/MPGENV/pre/' strava-java-comments.yml > deplo_1.yml"
         sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_2.yml"
-      }
     }
-    stage("SSH Into k8s Server") {
+    stage('SSH Into k8s Server') {
             def remote = [:]
             remote.name = 'mpg4ras01'
             remote.host = 'mpg4ras01'
