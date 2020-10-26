@@ -4,7 +4,7 @@ metadata:
   labels:
     run: strava-java-comments-svc
   name: strava-java-comments-svc
-  namespace: $ENV
+  namespace: MPGENV
 spec:
   ports:
     - port: 8082
@@ -20,7 +20,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: strava-java-comments
-  namespace: $ENV
+  namespace: MPGENV
 spec:
   replicas: 1
   selector:
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: strava-java-comments
-          image: mpastorg/client-comments:$RELEASE.$BUILD_NUMBER
+          image: mpastorg/client-comments:MPGRELEASE.MPGBUILD_NUMBER
           imagePullPolicy: Always
           ports:
             - containerPort: 8082

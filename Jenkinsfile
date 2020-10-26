@@ -27,15 +27,27 @@ pipeline {
         }
       }
     }
-    stage('Deploy on kubernetes') {
+    stage('prepare for kubernetes') {
       steps {
-          kubernetesDeploy(
-              kubeconfigId: '1c99e9a6-3159-41f1-a7d3-2e4dbbe13455',
-              configs: 'strava-java-comments.yml',
-              enableConfigSubstitution: true
-          )
+        def filename = 'strava-java-comments.yml'
+        sh "sed 's/MPGENV/pre/' strava-java-comments.yml > deplo_1.yml"
+        sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_2.yml"
       }
     }
+    stage("SSH Into k8s Server") {
+            def remote = [:]
+            remote.name = 'mpg4ras01'
+            remote.host = 'mpg4ras01'
+            remote.user = 'mpastorg'
+            remote.password = 'marubuO1'
+            remote.allowAnyHosts = true
+    }
+    stage('Put deplo.yml onto k8smaster') {
+                sshPut remote: remote, from: 'deplo_2.yml', into: '.'
+    }
+    stage('Deploy to k8s') {
+              sshCommand remote: remote, command: "kubectl apply -f deplo_2.yml"
+     }
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$RELEASE.$BUILD_NUMBER"
