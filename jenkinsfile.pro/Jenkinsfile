@@ -31,7 +31,7 @@ pipeline {
               remote.user = 'mpastorg'
               remote.password = 'marubuO1'
               remote.allowAnyHosts = true
-              sshPut remote: remote, from: 'deplo_2.yml', into: '.'
+              sshPut remote: remote, from: 'deplo_pro_3.yml', into: '.'
               sshCommand remote: remote, command: "kubectl apply -f deplo_pro_3.yml"
           }
         }
