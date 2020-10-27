@@ -3,7 +3,7 @@ pipeline {
   environment {
     ENV = 'pre'
     RELEASE = '0.2'
-    CONFIGMAP = '9946h98mtm'
+    CONFIGMAP = 'fdmhgmt4g4'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -30,7 +30,8 @@ pipeline {
     stage('prepare for kubernetes') {
       steps{
         sh "sed 's/MPGENV/pre/' strava-java-comments.yml > deplo_1.yml"
-        sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_2.yml"
+        sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_1b.yml"
+        sh "sed 's/MPGCONFIGMAP/$CONFIGMAP/' deplo_1b.yml > deplo_2.yml"
       }
     }
     stage('SSH Into k8s Server') {

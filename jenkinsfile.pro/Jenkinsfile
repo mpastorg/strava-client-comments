@@ -1,20 +1,37 @@
 pipeline {
   agent any
   environment {
-    ENV = 'pro'
+    ENV = 'default'
     RELEASE = '0.2'
-    CONFIGMAP = '5b94df246h'
+    CONFIGMAP = 'c5fc9dfh4g'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
   }
-    stage('Deploy on kubernetes') {
-      steps {
-          kubernetesDeploy(
-              kubeconfigId: '1c99e9a6-3159-41f1-a7d3-2e4dbbe13455',
-              configs: 'strava-java-comments.yml',
-              enableConfigSubstitution: true
-          )
+  stage('prepare for kubernetes') {
+    input {
+        message "Introduce build number"
+        parameters {
+            string(name: 'MPGBUILD', defaultValue: '00', description: 'Deploy this build number:')
+        }
+    }
+    steps{
+      sh "sed 's/MPGENV/default/' strava-java-comments.yml > deplo_pro_1.yml"
+      sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$MPGBUILD/' deplo_pro_1.yml > deplo_pro_2.yml"
+      sh "sed 's/MPGCONFIGMAP/$CONFIGMAP/' deplo_pro_2.yml > deplo_pro_3.yml"
+    }
+  }
+  stage('SSH Into k8s Server') {
+    steps{
+      script{
+          def remote = [:]
+          remote.name = 'mpg4ras01'
+          remote.host = 'mpg4ras01'
+          remote.user = 'mpastorg'
+          remote.password = 'marubuO1'
+          remote.allowAnyHosts = true
+          sshPut remote: remote, from: 'deplo_2.yml', into: '.'
+          sshCommand remote: remote, command: "kubectl apply -f deplo_pro_3.yml"
       }
     }
   }
