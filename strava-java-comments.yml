@@ -65,7 +65,7 @@ spec:
       volumes:
         - name: cm-app-strava-vol
           configMap:
-            name: cm-app-strava-fdmhgmt4g4
+            name: cm-java-strava-fdmhgmt4g4
             items:
               - key: application.yaml
                 path: application.yaml
