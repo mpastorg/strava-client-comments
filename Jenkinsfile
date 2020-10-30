@@ -3,7 +3,7 @@ pipeline {
   environment {
     ENV = 'pre'
     RELEASE = '0.2'
-    CONFIGMAP = 'fdmhgmt4g4'
+    CONFIGMAP = 'h7b99gf57m'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -40,11 +40,16 @@ pipeline {
             def remote = [:]
             remote.name = 'mpg4ras01'
             remote.host = 'mpg4ras01'
-            remote.user = 'mpastorg'
-            remote.password = 'marubuO1'
             remote.allowAnyHosts = true
-            sshPut remote: remote, from: 'deplo_2.yml', into: '.'
-            sshCommand remote: remote, command: "kubectl apply -f deplo_2.yml"
+            withCredentials([usernamePassword(credentialsId: 'mpgubumac01', usernameVariable: 'USERNAME'
+            , passwordVariable: 'PASSWORD')])
+            {
+                remote.user = "$USERNAME"
+                remote.password = "$PASSWORD"
+                sshPut remote: remote, from: 'deplo_2.yml', into: '.'
+                sshCommand remote: remote, command: "kubectl apply -f deplo_2.yml"
+                sshRemove remote: remote, path: 'deplo_2.yml'
+            }
         }
       }
     }

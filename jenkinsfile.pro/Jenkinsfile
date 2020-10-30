@@ -3,7 +3,7 @@ pipeline {
   environment {
     ENV = 'default'
     RELEASE = '0.2'
-    CONFIGMAP = 'c5fc9dfh4g'
+    CONFIGMAP = '9g5f45dt76'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -22,19 +22,25 @@ pipeline {
           sh "sed 's/MPGCONFIGMAP/$CONFIGMAP/' deplo_pro_2.yml > deplo_pro_3.yml"
         }
       }
-      stage('SSH Into k8s Server') {
-        steps{
-          script{
-              def remote = [:]
-              remote.name = 'mpg4ras01'
-              remote.host = 'mpg4ras01'
-              remote.user = 'mpastorg'
-              remote.password = 'marubuO1'
-              remote.allowAnyHosts = true
-              sshPut remote: remote, from: 'deplo_pro_3.yml', into: '.'
-              sshCommand remote: remote, command: "kubectl apply -f deplo_pro_3.yml"
+        stage('SSH Into k8s Server') {
+          steps{
+            script{
+                def remote = [:]
+                remote.name = 'mpg4ras01'
+                remote.host = 'mpg4ras01'
+                remote.allowAnyHosts = true
+                withCredentials([usernamePassword(credentialsId: 'mpgubumac01', usernameVariable: 'USERNAME'
+                , passwordVariable: 'PASSWORD')])
+                {
+                    remote.user = "$USERNAME"
+                    remote.password = "$PASSWORD"
+                    sshPut remote: remote, from: 'deplo_pro_3.yml', into: '.'
+                    sshCommand remote: remote, command: "kubectl apply -f deplo_pro_3.yml"
+                    sshRemove remote: remote, path: 'deplo_pro_3.yml'
+                }
+            }
           }
         }
-      }
-  }
+    }
+
 }

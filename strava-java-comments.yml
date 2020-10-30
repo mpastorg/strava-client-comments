@@ -30,6 +30,7 @@ spec:
     metadata:
       labels:
         app: strava-java-comments
+        release: MPGRELEASE.MPGBUILD_NUMBER
     spec:
       containers:
         - name: strava-java-comments
