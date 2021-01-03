@@ -3,7 +3,6 @@ pipeline {
   environment {
     ENV = 'pre'
     RELEASE = '0.2'
-    CONFIGMAP = 'h7b99gf57m'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -30,8 +29,7 @@ pipeline {
     stage('prepare for kubernetes') {
       steps{
         sh "sed 's/MPGENV/pre/' strava-java-comments.yml > deplo_1.yml"
-        sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_1b.yml"
-        sh "sed 's/MPGCONFIGMAP/$CONFIGMAP/' deplo_1b.yml > deplo_2.yml"
+        sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$BUILD_NUMBER/' deplo_1.yml > deplo_2.yml"
       }
     }
     stage('SSH Into k8s Server') {
@@ -51,11 +49,6 @@ pipeline {
                 sshRemove remote: remote, path: 'deplo_2.yml'
             }
         }
-      }
-    }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $registry:$RELEASE.$BUILD_NUMBER"
       }
     }
   }

@@ -3,7 +3,6 @@ pipeline {
   environment {
     ENV = 'default'
     RELEASE = '0.2'
-    CONFIGMAP = '9g5f45dt76'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -19,7 +18,6 @@ pipeline {
         steps{
           sh "sed 's/MPGENV/default/' strava-java-comments.yml > deplo_pro_1.yml"
           sh "sed 's/MPGRELEASE.MPGBUILD_NUMBER/$RELEASE.$MPGBUILD/' deplo_pro_1.yml > deplo_pro_2.yml"
-          sh "sed 's/MPGCONFIGMAP/$CONFIGMAP/' deplo_pro_2.yml > deplo_pro_3.yml"
         }
       }
         stage('SSH Into k8s Server') {
@@ -34,9 +32,9 @@ pipeline {
                 {
                     remote.user = "$USERNAME"
                     remote.password = "$PASSWORD"
-                    sshPut remote: remote, from: 'deplo_pro_3.yml', into: '.'
-                    sshCommand remote: remote, command: "kubectl apply -f deplo_pro_3.yml"
-                    sshRemove remote: remote, path: 'deplo_pro_3.yml'
+                    sshPut remote: remote, from: 'deplo_pro_2.yml', into: '.'
+                    sshCommand remote: remote, command: "kubectl apply -f deplo_pro_2.yml"
+                    sshRemove remote: remote, path: 'deplo_pro_2.yml'
                 }
             }
           }
