@@ -3,6 +3,7 @@ package es.pastorg.mpgstrava.clientComments;
 import es.pastorg.mpgstrava.background.KafkaSend;
 import es.pastorg.mpgstrava.repository.ClientComments;
 import es.pastorg.mpgstrava.repository.ClientCommentsRepository;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ClientCommentsController {
      * @param clientComments
      * @return
      */
+    @ApiOperation(value = "Send comments and suggestions.",
+            notes="No validations executed, just saving for future usage."
+    )
     @PostMapping("/strava/comments")
     ClientComments clientComments(@RequestBody ClientComments clientComments) {
         UUID uuid = UUID.randomUUID();

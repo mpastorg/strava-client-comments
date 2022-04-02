@@ -13,8 +13,17 @@ import org.springframework.web.client.RestTemplate;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.Server;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -32,6 +41,27 @@ public class ClientCommentsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ClientCommentsApplication.class, args);
+	}
+	@Bean
+	public Docket activityApi(){
+		Server testServer = new Server("test", "http://mpg4ras01:32209/strava/", "for testing"
+				, Collections.emptyList(), Collections.emptyList());
+		return new Docket(DocumentationType.OAS_30)
+				.servers(testServer)
+				.groupName("strava-comments")
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.ant("/strava/**"))
+				.build().apiInfo(getApiInfo());
+	}
+
+	private ApiInfo getApiInfo(){
+		return new ApiInfoBuilder().title("MadAstur")
+				.version("0.1").description("Learning new Java again")
+				.contact(new Contact("Marcos Pastor","http://www.madastur.com", "marcos@pastorg.es"))
+				.license("OPEN the Doc Index.")
+				.licenseUrl("https://api.madastur.com/Doc")
+				.build();
 	}
 
 	@Bean
