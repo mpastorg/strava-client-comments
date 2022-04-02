@@ -57,12 +57,4 @@ public class ClientCommentsApplication {
 
 		return dataSource;
 	}
-//	@Bean(name="entityManagerFactory")
-//	public LocalSessionFactoryBean sessionFactory() {
-//		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//		sessionFactory.setDataSource(dataSource());
-//		//List<Resource> mappingFiles = searchMappingFiles();
-//		//sessionFactory.setMappingLocations(mappingFiles.toArray(new Resource[mappingFiles.size()]));
-//		return sessionFactory;
-//	}
 }
