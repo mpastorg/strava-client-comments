@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     ENV = 'pre'
-    RELEASE = '0.2'
+    RELEASE = '0.3'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
