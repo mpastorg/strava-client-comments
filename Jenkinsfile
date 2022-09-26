@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     ENV = 'pre'
-    RELEASE = '0.3'
+    RELEASE = '0.4'
     registry = "mpastorg/client-comments"
     registryCredential = 'dockerhub'
     dockerImage = ''
@@ -36,8 +36,8 @@ pipeline {
       steps{
         script{
             def remote = [:]
-            remote.name = 'mpg4ras01'
-            remote.host = 'mpg4ras01'
+            remote.name = '192.168.25.22'
+            remote.host = '192.168.25.22'
             remote.allowAnyHosts = true
             withCredentials([usernamePassword(credentialsId: 'mpgubumac01', usernameVariable: 'USERNAME'
             , passwordVariable: 'PASSWORD')])
